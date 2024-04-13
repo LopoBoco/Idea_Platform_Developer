@@ -1,0 +1,2 @@
+1. Скомпилируйте исходный код с помощью команды     javac FlightAnalyzer.java
+2. Запустите программу с помощью команды            java FlightAnalyzer

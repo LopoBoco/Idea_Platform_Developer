@@ -1,0 +1,16 @@
+[
+  {
+    "origin": "Владивосток",
+    "destination": "Тель-Авив",
+    "carrier": "Аэрофлот",
+    "flight_time": 10,
+    "price": 800
+  },
+  {
+    "origin": "Владивосток",
+    "destination": "Тель-Авив",
+    "carrier": "Аврора",
+    "flight_time": 12,
+    "price": 600
+  }
+]
