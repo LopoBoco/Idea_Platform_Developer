@@ -33,25 +33,28 @@ public class FlightAnalyzer {
                 }
             }
 
-            double sum = 0;
+            int sum = 0;
             for (int i = 0; i < prices.length(); i++) {
-                sum += prices.getDouble(i);
+                sum += prices.getInt(i);
             }
-            double avgPrice = sum / prices.length();
+            int avgPrice = sum / prices.length();
 
-            double median;
+            int median;
             if (prices.length() % 2 == 0) {
-                median = (prices.getDouble(prices.length() / 2 - 1) + prices.getDouble(prices.length() / 2)) / 2;
+                median = (prices.getInt(prices.length() / 2 - 1) + prices.getInt(prices.length() / 2)) / 2;
             } else {
-                median = prices.getDouble(prices.length() / 2);
+                median = prices.getInt(prices.length() / 2);
             }
-
-            System.out.println("Минимальное время полета для каждого авиаперевозчика:");
+            
+            int timeToFly = Integer.MAX_VALUE;
+            System.out.println();
             for (Map.Entry<String, Integer> entry : minFlightTimes.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+                if (timeToFly > entry.getValue())
+                    timeToFly = entry.getValue();
             }
+            System.out.println("Минимальное время полета: " + "\n" + timeToFly + " часов");
 
-            System.out.println("Разница между средней ценой и медианой: " + (avgPrice - median));
+            System.out.println("\n" + "Разница между средней ценой и медианой: " + "\n" + (avgPrice - median) + " рублей");
 
         } catch (Exception e) {
             e.printStackTrace();

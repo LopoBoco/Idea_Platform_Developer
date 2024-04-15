@@ -2,15 +2,36 @@
   {
     "origin": "Владивосток",
     "destination": "Тель-Авив",
-    "carrier": "Аэрофлот",
-    "flight_time": 10,
-    "price": 800
+    "carrier": "Uzbekistan",
+    "flight_time": 20,
+    "price": 44000
   },
   {
     "origin": "Владивосток",
     "destination": "Тель-Авив",
-    "carrier": "Аврора",
-    "flight_time": 12,
-    "price": 600
+    "carrier": "Emirates",
+    "flight_time": 26,
+    "price": 50000
+  },
+  {
+    "origin": "Владивосток",
+    "destination": "Тель-Авив",
+    "carrier": "Flydubai",
+    "flight_time": 29,
+    "price": 45000
+  },
+  {
+    "origin": "Владивосток",
+    "destination": "Тель-Авив",
+    "carrier": "Azerbaijan Airlines",
+    "flight_time": 30,
+    "price": 70000
+  },
+  {
+    "origin": "Владивосток",
+    "destination": "Тель-Авив",
+    "carrier": "Etihad",
+    "flight_time": 25,
+    "price": 39000
   }
 ]
