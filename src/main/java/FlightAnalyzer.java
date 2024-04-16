@@ -30,7 +30,7 @@ public class FlightAnalyzer {
                 int minFlightTime = Integer.MAX_VALUE;
                 for (int i = 0; i < tickets.length(); i++) {
                     JSONObject ticket = tickets.getJSONObject(i);
-                    if (ticket.getString("carrier").equals(carrier) && !ticket.getString("destination_name").equals("Уфа")) {
+                    if (ticket.getString("carrier").equals(carrier) && !ticket.getString("destination_name").equals("Уфа") && !ticket.getString("origin_name").equals("Ларнака")) {
                         int departureHour = Integer.parseInt(ticket.getString("departure_time").split(":")[0]);
                         int arrivalHour = Integer.parseInt(ticket.getString("arrival_time").split(":")[0]);
                         int flightTime = arrivalHour - departureHour;
