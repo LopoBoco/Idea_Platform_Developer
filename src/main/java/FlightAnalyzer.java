@@ -1,62 +1,58 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class FlightAnalyzer {
 
     public static void main(String[] args) {
         try {
-            JSONTokener tokener = new JSONTokener(new FileReader("tickets.json"));
-            JSONArray flights = new JSONArray(tokener);
+            String json = new String(Files.readAllBytes(Paths.get("tickets.json")));
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray tickets = jsonObject.getJSONArray("tickets");
 
-            Map<String, Integer> minFlightTimes = new HashMap<>();
+            List<Integer> prices = new ArrayList<>();
 
-            JSONArray prices = new JSONArray();
-
-            for (int i = 0; i < flights.length(); i++) {
-                JSONObject flight = flights.getJSONObject(i);
-                String origin = flight.getString("origin");
-                String destination = flight.getString("destination");
-                String carrier = flight.getString("carrier");
-                int flightTime = flight.getInt("flight_time");
-
-                if (origin.equals("Владивосток") && destination.equals("Тель-Авив")) {
-                    if (!minFlightTimes.containsKey(carrier) || flightTime < minFlightTimes.get(carrier)) {
-                        minFlightTimes.put(carrier, flightTime);
-                    }
-
-                    prices.put(flight.getDouble("price"));
+            for (int i = 0; i < tickets.length(); i++) {
+                JSONObject ticket = tickets.getJSONObject(i);
+                if (ticket.getString("origin").equals("VVO") && ticket.getString("destination").equals("TLV")) {
+                    prices.add(ticket.getInt("price"));
                 }
             }
 
-            int sum = 0;
-            for (int i = 0; i < prices.length(); i++) {
-                sum += prices.getInt(i);
+            System.out.println("Минимальное время полета для каждого авиаперевозчика:");
+            for (String carrier : List.of("TK", "S7", "SU", "BA")) {
+                int minFlightTime = Integer.MAX_VALUE;
+                for (int i = 0; i < tickets.length(); i++) {
+                    JSONObject ticket = tickets.getJSONObject(i);
+                    if (ticket.getString("carrier").equals(carrier) && !ticket.getString("destination_name").equals("Уфа")) {
+                        int departureHour = Integer.parseInt(ticket.getString("departure_time").split(":")[0]);
+                        int arrivalHour = Integer.parseInt(ticket.getString("arrival_time").split(":")[0]);
+                        int flightTime = arrivalHour - departureHour;
+                        minFlightTime = Math.min(minFlightTime, flightTime);
+                    }
+                }
+                System.out.println(carrier + ": " + minFlightTime + " hours");
             }
-            int avgPrice = sum / prices.length();
 
-            int median;
-            if (prices.length() % 2 == 0) {
-                median = (prices.getInt(prices.length() / 2 - 1) + prices.getInt(prices.length() / 2)) / 2;
+            int averagePrice = (int) prices.stream().mapToInt(Integer::intValue).average().orElse(0);
+            Collections.sort(prices);
+            int medianPrice;
+            if (prices.size() % 2 == 0) {
+                medianPrice = (prices.get(prices.size() / 2 - 1) + prices.get(prices.size() / 2)) / 2;
             } else {
-                median = prices.getInt(prices.length() / 2);
+                medianPrice = prices.get(prices.size() / 2);
             }
-            
-            int timeToFly = Integer.MAX_VALUE;
-            System.out.println();
-            for (Map.Entry<String, Integer> entry : minFlightTimes.entrySet()) {
-                if (timeToFly > entry.getValue())
-                    timeToFly = entry.getValue();
-            }
-            System.out.println("Минимальное время полета: " + "\n" + timeToFly + " часов");
 
-            System.out.println("\n" + "Разница между средней ценой и медианой: " + "\n" + (avgPrice - median) + " рублей");
+            int priceDifference = averagePrice - medianPrice;
+            System.out.println("\n" + "Разница между средней ценой и медианой: " + "\n" + priceDifference + " рублей");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
