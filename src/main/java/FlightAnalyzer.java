@@ -12,32 +12,21 @@ public class FlightAnalyzer {
 
     public static void main(String[] args) {
         try {
+            MinFlightTime.minFlightTime();
+
             String json = new String(Files.readAllBytes(Paths.get("tickets.json")));
             JSONObject jsonObject = new JSONObject(json);
             JSONArray tickets = jsonObject.getJSONArray("tickets");
 
             List<Integer> prices = new ArrayList<>();
 
+
             for (int i = 0; i < tickets.length(); i++) {
                 JSONObject ticket = tickets.getJSONObject(i);
                 if (ticket.getString("origin").equals("VVO") && ticket.getString("destination").equals("TLV")) {
+
                     prices.add(ticket.getInt("price"));
                 }
-            }
-
-            System.out.println("Минимальное время полета для каждого авиаперевозчика:");
-            for (String carrier : List.of("TK", "S7", "SU", "BA")) {
-                int minFlightTime = Integer.MAX_VALUE;
-                for (int i = 0; i < tickets.length(); i++) {
-                    JSONObject ticket = tickets.getJSONObject(i);
-                    if (ticket.getString("carrier").equals(carrier) && !ticket.getString("destination_name").equals("Уфа") && !ticket.getString("origin_name").equals("Ларнака")) {
-                        int departureHour = Integer.parseInt(ticket.getString("departure_time").split(":")[0]);
-                        int arrivalHour = Integer.parseInt(ticket.getString("arrival_time").split(":")[0]);
-                        int flightTime = arrivalHour - departureHour;
-                        minFlightTime = Math.min(minFlightTime, flightTime);
-                    }
-                }
-                System.out.println(carrier + ": " + minFlightTime + " hours");
             }
 
             int averagePrice = (int) prices.stream().mapToInt(Integer::intValue).average().orElse(0);
